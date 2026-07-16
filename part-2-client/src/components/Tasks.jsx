@@ -1,5 +1,6 @@
 import { useState } from "react";
 import AxiosInstance from "../Hook/AxiosInstance";
+import Swal from "sweetalert2";
 
 
 const Tasks = ({ tasks, setTasks }) => {
@@ -7,7 +8,7 @@ const Tasks = ({ tasks, setTasks }) => {
 
 
 
-    // to pass data haswal button 
+    // to pass data haswal button --------------------------------
     const handleEditButton = (task) => {
         setSelectedTask(task);
 
@@ -15,7 +16,7 @@ const Tasks = ({ tasks, setTasks }) => {
         document.getElementById("my_modal_5").showModal();
     };
 
-    // update button--------------------------------------------
+    // update button----------------------------------------------
 
     const handleUpdate = async (e) => {
         e.preventDefault()
@@ -31,8 +32,8 @@ const Tasks = ({ tasks, setTasks }) => {
         const description = e.target.description.value;
         const dueDate = e.target.dueDate.value;
         const newTask = { name, title, description, dueDate }
-        console.log(selectedTask);
-        console.log(selectedTask._id);
+        // console.log(selectedTask);
+        // console.log(selectedTask._id);
         // console.log(tasks.data._id)
 
         const res = await AxiosInstance.patch(
@@ -40,7 +41,7 @@ const Tasks = ({ tasks, setTasks }) => {
             newTask
         );
 
-        console.log(res.data);
+        // console.log(res.data);
         if (res.data.modifiedCount > 0) {
             setTasks(prev =>
                 prev.map(task =>
@@ -56,6 +57,35 @@ const Tasks = ({ tasks, setTasks }) => {
 
         }
     }
+
+
+    // deltete button-----------------------------------------------
+
+    const handleDelete = async (_id) => {
+        const result = await Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to recover this task!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes, delete it!",
+        });
+
+        if (result.isConfirmed) {
+            const res = await AxiosInstance.delete(`/tasks/${_id}`);
+
+            if (res.data.deletedCount > 0) {
+                setTasks(prev => prev.filter(task => task._id !== _id));
+
+                Swal.fire({
+                    icon: "success",
+                    title: "Deleted!",
+                    text: "Task has been deleted.",
+                    timer: 1500,
+                    showConfirmButton: false,
+                });
+            }
+        }
+    };
 
     return (
 
@@ -133,7 +163,7 @@ const Tasks = ({ tasks, setTasks }) => {
                                         })} className="btn btn-primary">Edit</button>
                                 </th>
                                 <th>
-                                    <a className="btn btn-warning">Delete</a>
+                                    <a onClick={() => { handleDelete(_id) }} className="btn btn-warning">Delete</a>
                                 </th>
 
                             </tr>)
