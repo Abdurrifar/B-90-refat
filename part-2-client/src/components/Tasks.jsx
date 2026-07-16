@@ -1,18 +1,61 @@
-
 import { useState } from "react";
 import AxiosInstance from "../Hook/AxiosInstance";
 
 
-const Tasks = ({ tasks }) => {
-
-
+const Tasks = ({ tasks, setTasks }) => {
     const [selectedTask, setSelectedTask] = useState(null);
 
-    const handleEditButton = (task) => {
 
+
+    // to pass data haswal button 
+    const handleEditButton = (task) => {
         setSelectedTask(task);
+
+
         document.getElementById("my_modal_5").showModal();
     };
+
+    // update button--------------------------------------------
+
+    const handleUpdate = async (e) => {
+        e.preventDefault()
+
+        if (!selectedTask) {
+            console.log("No task selected");
+            return;
+        }
+
+        const form = e.target;
+        const name = e.target.name.value;
+        const title = e.target.title.value;
+        const description = e.target.description.value;
+        const dueDate = e.target.dueDate.value;
+        const newTask = { name, title, description, dueDate }
+        console.log(selectedTask);
+        console.log(selectedTask._id);
+        // console.log(tasks.data._id)
+
+        const res = await AxiosInstance.patch(
+            `/tasks/${selectedTask._id}`,
+            newTask
+        );
+
+        console.log(res.data);
+        if (res.data.modifiedCount > 0) {
+            setTasks(prev =>
+                prev.map(task =>
+                    task._id === selectedTask._id
+                        ? { ...task, ...newTask }
+                        : task
+                )
+            );
+            document.getElementById("my_modal_5").close();
+
+            setSelectedTask(null);
+            e.target.reset();
+
+        }
+    }
 
     return (
 
@@ -69,8 +112,7 @@ const Tasks = ({ tasks }) => {
                                 </th>
                                 <th>
                                     <select
-                                        value={status}
-                                        onChange={(e) => setStatus(e.target.value)}
+
                                     >
                                         <option value="pending">Pending</option>
                                         <option value="in-progress">In Progress</option>
@@ -78,6 +120,7 @@ const Tasks = ({ tasks }) => {
                                     </select>
                                 </th>
                                 <th>
+
                                     <button onClick={() =>
                                         handleEditButton({
                                             _id,
@@ -90,17 +133,12 @@ const Tasks = ({ tasks }) => {
                                         })} className="btn btn-primary">Edit</button>
                                 </th>
                                 <th>
-
                                     <a className="btn btn-warning">Delete</a>
                                 </th>
 
                             </tr>)
                         }
-
-
                     </tbody>
-
-
                 </table>
             </div>
 
@@ -110,86 +148,73 @@ const Tasks = ({ tasks }) => {
                 <div className="modal-box">
 
                     <div className="modal-action">
-                        <form method="dialog">
-                            <form className=" bg-gray-200 p-4 border-gray-100 rounded  mx-0-auto   text-xl font-bold w-120 "   >
 
+                        <form onSubmit={handleUpdate} className=" bg-gray-200 p-4 border-gray-100 rounded  mx-0-auto   text-xl font-bold w-120 "   >
+
+                            <div>
+                                <h3 className='font-bold text-xl  text-gray-500 m-3'>Edit  𝐓a𝐬k𝐬</h3>
+                            </div>
+
+                            <fieldset className="fieldset  gap-3   ml-3">
                                 <div>
-                                    <h3 className='font-bold text-xl  text-gray-500 m-3'>Edit  𝐓a𝐬k𝐬</h3>
+                                    <label className="label font-bold text-black text-[14px] ">𝐍𝐚𝐦𝐞</label>
+                                    <input className="h-[25px]  ml-2 border border-2px-solid rounded p-2 
+                                          "
+                                        type="text"
+                                        name="name"
+                                        defaultValue={selectedTask?.name}
+                                    />
+
+                                </div>
+                                <div>
+                                    <label className="label font-bold text-black text-[14px] ">Tɪᴛʟᴇ</label>
+                                    <input className="h-[25px] ml-2 border border-2px-solid
+                                         rounded p-2 "
+                                        type="text"
+                                        name="title"
+                                        defaultValue={selectedTask?.title}
+                                    />
+
+                                </div>
+                                <div>
+                                    <label className="label font-bold text-black text-[14px]">Description:</label>
+                                    <input className="h-[25px] w-80 ml-2 border border-2px-solid
+                                          rounded p-2 "
+                                        type="text"
+                                        name="description"
+                                        defaultValue={selectedTask?.description}
+                                    />
+
+                                </div>
+                                <div>
+                                    <label className="label font-bold text-black text-[14px]">Due Date</label>
+                                    <input className="h-[25px] ml-2 border border-2px-solid
+                                        rounded p-2  "
+                                        type="date"
+                                        name="dueDate"
+                                        defaultValue={selectedTask?.dueDate.slice(0, 10)}
+                                    />
                                 </div>
 
-                                <fieldset className="fieldset  gap-3   ml-3">
-                                    <div>
-                                        <label className="label font-bold text-black text-[14px] ">𝐍𝐚𝐦𝐞</label>
-                                        <input className="h-[25px]  ml-2 border border-2px-solid rounded p-2 
-                                          "
-                                            type="text"
-                                            name="name"
-                                            defaultValue={selectedTask?.name}
-                                        />
+                                <div>
+                                    <button type="submit" className="btn btn-primary mt-5">Update Task</button>
+                                </div>
 
-                                    </div>
-                                    <div>
-                                        <label className="label font-bold text-black text-[14px] ">Tɪᴛʟᴇ</label>
-                                        <input className="h-[25px] ml-2 border border-2px-solid
-                                         rounded p-2 "
-                                            type="text"
-                                            name="title"
-                                            defaultValue={selectedTask?.title}
-                                        />
+                            </fieldset>
 
-                                    </div>
-                                    <div>
-                                        <label className="label font-bold text-black text-[14px]">Description:</label>
-                                        <input className="h-[25px] w-80 ml-2 border border-2px-solid
-                                          rounded p-2 "
-                                            type="text"
-                                            name="description"
-                                            defaultValue={selectedTask?.description}
-                                        />
-
-                                    </div>
-                                    <div>
-                                        <label className="label font-bold text-black text-[14px]">Due Date</label>
-                                        <input className="h-[25px] ml-2 border border-2px-solid
-                                        rounded p-2  "
-                                            type="date"
-                                            name="dueDate"
-                                            defaultValue={selectedTask?.dueDate}
-                                        />
-                                    </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-                                    <div>
-                                        <button className="btn btn-primary mt-5">Update Task</button>
-                                    </div>
-
-                                </fieldset>
-
-                            </form>
-
-
-
-
-
-
-
-
-                            <button className="btn">Close</button>
+                            <button
+                                type="button"
+                                className="btn"
+                                onClick={() => document.getElementById("my_modal_5").close()}
+                            >
+                                Close
+                            </button>
                         </form>
+
+
                     </div>
                 </div>
-            </dialog>
+            </dialog >
         </div >
     );
 };

@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap');
 @import "tailwindcss";
 
 @plugin "daisyui" {
@@ -28,5 +29,3 @@
     background: linear-gradient(90deg, #5323cf 0%, #8c4fea 100%);
 
 }
-
-@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap');

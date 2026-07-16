@@ -7,9 +7,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const AddNewTasks = ({ tasks, setTasks }) => {
 
-
-
-
     const handleCreateTask = e => {
         e.preventDefault()
         const name = e.target.name.value;
