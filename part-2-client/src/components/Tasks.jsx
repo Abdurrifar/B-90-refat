@@ -58,7 +58,6 @@ const Tasks = ({ tasks, setTasks }) => {
         }
     }
 
-
     // deltete button-----------------------------------------------
 
     const handleDelete = async (_id) => {
@@ -96,7 +95,7 @@ const Tasks = ({ tasks, setTasks }) => {
             <div>
                 <h3 className='font-bold text-xl  text-gray-500 ml-3 '>  𝐓a𝐬k𝐬</h3>
             </div>
-
+            {/* ---------------------table----------- ---------------------- */}
             <div className="overflow-x-auto">
                 <table className="table">
                     {/* head -------------------------------------------------*/}
@@ -186,7 +185,6 @@ const Tasks = ({ tasks, setTasks }) => {
                     </tbody>
                 </table>
             </div>
-
 
             {/* modal--------------- */}
             <dialog id="my_modal_5" className="modal modal-bottom md:modal-middle">

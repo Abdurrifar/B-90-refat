@@ -3,8 +3,6 @@ import AxiosInstance from '../Hook/AxiosInstance';
 import Swal from 'sweetalert2';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-
-
 const AddNewTasks = ({ tasks, setTasks }) => {
 
     const handleCreateTask = async (e) => {
@@ -73,18 +71,9 @@ const AddNewTasks = ({ tasks, setTasks }) => {
                     <div>
                         <button className="btn btn-primary mt-5">Create New Task</button>
                     </div>
-
                 </fieldset>
-
             </form>
-
-
         </div>
-
-
-
-
-
     );
 };
 
