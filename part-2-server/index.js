@@ -5,10 +5,13 @@ const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const app = express();
 const port = process.env.PORT || 5000;
 
-// middleware
+// middleware 
 app.use(cors());
 app.use(express.json())
 
+
+
+// atlas database
 
 const uri = `mongodb://${process.env.DB_USER}:${process.env.DB_PASSWORD}@ac-wflxewq-shard-00-00.fqmaumg.mongodb.net:27017,ac-wflxewq-shard-00-01.fqmaumg.mongodb.net:27017,ac-wflxewq-shard-00-02.fqmaumg.mongodb.net:27017/?ssl=true&replicaSet=atlas-2tvwdm-shard-0&authSource=admin&appName=Cluster0`
 
