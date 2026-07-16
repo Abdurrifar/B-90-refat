@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const AddNewTasks = ({ tasks, setTasks }) => {
 
-    const handleCreateTask = e => {
+    const handleCreateTask = async (e) => {
         e.preventDefault()
         const name = e.target.name.value;
         const title = e.target.title.value;
@@ -16,25 +16,30 @@ const AddNewTasks = ({ tasks, setTasks }) => {
 
         const newTask = { name, title, description, dueDate }
 
-        AxiosInstance.post('/tasks', newTask).then(data => {
+        // AxiosInstance.post('/tasks', newTask).then(data => {
 
-            if (data.data.insertedId) {
+        //     if (data.data.insertedId) {
 
-                Swal.fire({
-                    title: "Task create done!",
-                    icon: " success",
-                    draggable: true,
-                    timer: 1800
-                });
+        //         Swal.fire({
+        //             title: "Task create done!",
+        //             icon: " success",
+        //             draggable: true,
+        //             timer: 1800
+        //         });
 
-                newTask._id = data.data.insertedId;
-                setTasks([...tasks, newTask]);
+        //         newTask._id = data.data.insertedId;
+        //         setTasks([...tasks, newTask]);
 
-            }
+        //     }
 
-        })
+        // })
 
 
+        const res = await AxiosInstance.post("/tasks", newTask);
+
+        if (res.data.insertedId) {
+            setTasks(prev => [...prev, { ...newTask, _id: res.data.insertedId, },]);
+        }
 
     }
     return (
