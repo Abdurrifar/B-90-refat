@@ -37,6 +37,11 @@ const AddNewTasks = ({ tasks, setTasks }) => {
 
         if (res.data.insertedId) {
             setTasks(prev => [...prev, { ...newTask, _id: res.data.insertedId, },]);
+            Swal.fire({
+                title: "Tasks Create Done",
+                icon: "success",
+                draggable: true
+            });
         }
 
     }
